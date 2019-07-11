@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Like from "./like";
 import Pagination from "./pagination";
 import ListGroup from "./listGroup";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
+import MovieTable from "./movieTable";
 
 class Movies extends Component {
   state = {
@@ -37,15 +37,7 @@ class Movies extends Component {
     this.setState({ genreId, activePage: 1 });
   };
   render() {
-    const {
-      movies,
-      onDelete,
-      onLike,
-      itemPerPage,
-      activePage,
-      genreId,
-      genres
-    } = this.state;
+    const { movies, itemPerPage, activePage, genreId, genres } = this.state;
     const genredMovies =
       genreId === 0
         ? movies
@@ -82,33 +74,11 @@ class Movies extends Component {
                     <th />
                   </tr>
                 </thead>
-                <tbody>
-                  {paginatedMovies.map(movie => {
-                    return (
-                      <tr key={movie._id}>
-                        <td>{movie.title}</td>
-                        <td>{movie.genre.name}</td>
-                        <td>{movie.numberInStock}</td>
-                        <td>{movie.dailyRentalRate}</td>
-                        <td>
-                          <Like
-                            like={movie.isLiked}
-                            onClick={() => onLike(movie._id)}
-                          />
-                        </td>
-                        <td>
-                          <button
-                            type="button"
-                            className="btn btn-danger"
-                            onClick={() => onDelete(movie._id)}
-                          >
-                            Supprimer
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
+                <MovieTable
+                  items={paginatedMovies}
+                  onDelete={this.handleDelete}
+                  onLike={this.handleLike}
+                />
               </table>
             )}
           </div>
