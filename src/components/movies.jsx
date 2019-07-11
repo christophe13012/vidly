@@ -4,6 +4,7 @@ import ListGroup from "./listGroup";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import MovieTable from "./movieTable";
+import _ from "lodash";
 
 class Movies extends Component {
   state = {
@@ -11,7 +12,11 @@ class Movies extends Component {
     itemPerPage: 4,
     activePage: 1,
     genres: [],
-    genreId: 0
+    genreId: 0,
+    sort: {
+      label: "title",
+      order: "asc"
+    }
   };
   componentDidMount() {
     let movies = getMovies();
@@ -23,7 +28,6 @@ class Movies extends Component {
     const movies = this.state.movies.filter(m => m._id !== id);
     this.setState({ movies });
   };
-
   handleLike = id => {
     const movies = [...this.state.movies];
     const index = movies.findIndex(m => m._id === id);
@@ -36,16 +40,28 @@ class Movies extends Component {
   handleGenre = genreId => {
     this.setState({ genreId, activePage: 1 });
   };
+  handleSort = label => {
+    const sort = { ...this.state.sort };
+    sort.label = label;
+    sort.order = sort.order === "asc" ? "desc" : "asc";
+    this.setState({ sort });
+  };
   render() {
     const { movies, itemPerPage, activePage, genreId, genres } = this.state;
     const genredMovies =
       genreId === 0
         ? movies
         : movies.filter(movie => movie.genre._id === genreId);
-    const paginatedMovies = genredMovies.slice(
+    const sortedMovies = _.orderBy(
+      genredMovies,
+      [this.state.sort.label],
+      [this.state.sort.order]
+    );
+    let paginatedMovies = sortedMovies.slice(
       (activePage - 1) * itemPerPage,
       itemPerPage + (activePage - 1) * itemPerPage
     );
+
     return (
       <div className="container">
         <div className="row">
@@ -62,25 +78,12 @@ class Movies extends Component {
                     genredMovies.length
                   } films présents dans la base de donnée`}
             </header>
-            {genredMovies.length !== 0 && (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Titre</th>
-                    <th>Genre</th>
-                    <th>Stock</th>
-                    <th>Note</th>
-                    <th />
-                    <th />
-                  </tr>
-                </thead>
-                <MovieTable
-                  items={paginatedMovies}
-                  onDelete={this.handleDelete}
-                  onLike={this.handleLike}
-                />
-              </table>
-            )}
+            <MovieTable
+              movies={paginatedMovies}
+              onDelete={this.handleDelete}
+              onLike={this.handleLike}
+              onSort={this.handleSort}
+            />
           </div>
         </div>
 
