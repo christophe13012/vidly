@@ -1,15 +1,29 @@
 import React, { Component } from "react";
 import Like from "./like";
 import Pagination from "./pagination";
-import { getMovies } from "../services/fakeMovieService";
 import ListGroup from "./listGroup";
+import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
 
 class Movies extends Component {
-  state = { movies: getMovies(), itemPerPage: 4, activePage: 1, genreId: 0 };
+  state = {
+    movies: getMovies(),
+    itemPerPage: 4,
+    activePage: 1,
+    genres: [],
+    genreId: 0
+  };
+  componentDidMount() {
+    let movies = getMovies();
+    let genres = getGenres();
+    genres = [{ _id: 0, name: "Tous genres" }, ...genres];
+    this.setState({ movies, genres });
+  }
   handleDelete = id => {
     const movies = this.state.movies.filter(m => m._id !== id);
     this.setState({ movies });
   };
+
   handleLike = id => {
     const movies = [...this.state.movies];
     const index = movies.findIndex(m => m._id === id);
@@ -29,7 +43,8 @@ class Movies extends Component {
       onLike,
       itemPerPage,
       activePage,
-      genreId
+      genreId,
+      genres
     } = this.state;
     const genredMovies =
       genreId === 0
@@ -42,7 +57,11 @@ class Movies extends Component {
     return (
       <div className="container">
         <div className="row">
-          <ListGroup genreId={genreId} onGenre={this.handleGenre} />
+          <ListGroup
+            genreId={genreId}
+            genres={genres}
+            onGenre={this.handleGenre}
+          />
           <div className="col-9">
             <header style={styles.header}>
               {genredMovies.length === 0
@@ -96,10 +115,9 @@ class Movies extends Component {
         </div>
 
         <Pagination
-          movies={movies}
+          movies={genredMovies}
           itemPerPage={itemPerPage}
           activePage={activePage}
-          genreId={genreId}
           onPagination={this.handlePagination}
         />
       </div>

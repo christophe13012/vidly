@@ -1,13 +1,10 @@
 import React, { Component } from "react";
-import { getGenres } from "../services/fakeGenreService";
 
 class ListGroup extends Component {
   render() {
-    let genres = getGenres();
-    genres = [{ _id: 0, name: "Tous genres" }, ...genres];
     return (
       <ul className="col-3 list-group">
-        {genres.map(genre => {
+        {this.props.genres.map(genre => {
           return (
             <li
               key={genre._id}
