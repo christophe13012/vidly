@@ -4,8 +4,18 @@ import PropTypes from "prop-types";
 class Pagination extends Component {
   state = {};
   renderPagination() {
-    const { movies, itemPerPage, activePage, onPagination } = this.props;
-    const pages = Math.ceil(movies.length / itemPerPage);
+    const {
+      movies,
+      itemPerPage,
+      activePage,
+      onPagination,
+      genreId
+    } = this.props;
+    const genredMovies =
+      genreId === 0
+        ? movies
+        : movies.filter(movie => movie.genre._id === genreId);
+    const pages = Math.ceil(genredMovies.length / itemPerPage);
     let li = [];
     for (let index = 1; index <= pages; index++) {
       li.push(
