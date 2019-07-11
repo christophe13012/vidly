@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Pagination extends Component {
   state = {};
@@ -31,4 +32,10 @@ class Pagination extends Component {
   }
 }
 
+Pagination.propTypes = {
+  itemPerPage: PropTypes.number.isRequired,
+  activePage: PropTypes.number.isRequired,
+  movies: PropTypes.array.isRequired,
+  onPagination: PropTypes.func.isRequired
+};
 export default Pagination;

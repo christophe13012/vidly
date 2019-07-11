@@ -3,6 +3,7 @@ import "./App.css";
 import Movies from "./components/movies";
 import Pagination from "./components/pagination";
 import { getMovies } from "./services/fakeMovieService";
+import ListGroup from "./components/listGroup";
 
 class App extends Component {
   state = { movies: getMovies(), itemPerPage: 4, activePage: 1 };
@@ -22,14 +23,18 @@ class App extends Component {
   render() {
     const { movies, itemPerPage, activePage } = this.state;
     return (
-      <div className="App">
-        <Movies
-          movies={movies}
-          itemPerPage={itemPerPage}
-          activePage={activePage}
-          onDelete={this.handleDelete}
-          onLike={this.handleLike}
-        />
+      <div className="App container">
+        <div className="row">
+          <ListGroup />
+          <Movies
+            movies={movies}
+            itemPerPage={itemPerPage}
+            activePage={activePage}
+            onDelete={this.handleDelete}
+            onLike={this.handleLike}
+          />
+        </div>
+
         <Pagination
           movies={movies}
           itemPerPage={itemPerPage}

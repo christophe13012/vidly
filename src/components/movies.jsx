@@ -7,7 +7,7 @@ const Movies = ({ movies, onDelete, onLike, itemPerPage, activePage }) => {
     itemPerPage + (activePage - 1) * itemPerPage
   );
   return (
-    <React.Fragment>
+    <div className="col-9">
       <header style={styles.header}>
         {movies.length === 0
           ? "Aucun film présent dans la base de donnée"
@@ -54,7 +54,7 @@ const Movies = ({ movies, onDelete, onLike, itemPerPage, activePage }) => {
           </tbody>
         </table>
       )}
-    </React.Fragment>
+    </div>
   );
 };
 
