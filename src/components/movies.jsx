@@ -14,7 +14,7 @@ class Movies extends Component {
     genres: [],
     genreId: 0,
     sort: {
-      label: "title",
+      path: "title",
       order: "asc"
     }
   };
@@ -40,22 +40,29 @@ class Movies extends Component {
   handleGenre = genreId => {
     this.setState({ genreId, activePage: 1 });
   };
-  handleSort = label => {
+  handleSort = path => {
     const sort = { ...this.state.sort };
-    if (sort.label !== label) sort.order = "asc";
+    if (sort.path !== path) sort.order = "asc";
     else sort.order = sort.order === "asc" ? "desc" : "asc";
-    sort.label = label;
+    sort.path = path;
     this.setState({ sort });
   };
   render() {
-    const { movies, itemPerPage, activePage, genreId, genres } = this.state;
+    const {
+      movies,
+      itemPerPage,
+      activePage,
+      genreId,
+      genres,
+      sort
+    } = this.state;
     const genredMovies =
       genreId === 0
         ? movies
         : movies.filter(movie => movie.genre._id === genreId);
     const sortedMovies = _.orderBy(
       genredMovies,
-      [this.state.sort.label],
+      [this.state.sort.path],
       [this.state.sort.order]
     );
     let paginatedMovies = sortedMovies.slice(
@@ -74,7 +81,7 @@ class Movies extends Component {
           <div className="col-9">
             <header style={styles.header}>
               {genredMovies.length === 0
-                ? "Aucun film présent dans la base de donnée"
+                ? "Aucun film présent dans la base de données"
                 : `Voici ${
                     genredMovies.length
                   } films présents dans la base de donnée`}
@@ -84,6 +91,7 @@ class Movies extends Component {
               onDelete={this.handleDelete}
               onLike={this.handleLike}
               onSort={this.handleSort}
+              sort={sort}
             />
           </div>
         </div>

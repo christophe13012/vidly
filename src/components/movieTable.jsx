@@ -1,54 +1,74 @@
 import React, { Component } from "react";
+import TableHeader from "./tableHeader";
+import TableBody from "./tableBody";
 import Like from "./like";
+import { Link } from "react-router-dom";
 
 class MovieTable extends Component {
-  state = {};
+  state = {
+    headers: [
+      {
+        path: "title",
+        label: "Titre",
+        sort: true,
+        content: item => <Link to={"/movies/" + item._id}>{item.title}</Link>
+      },
+      {
+        path: "genre.name",
+        label: "Genre",
+        sort: true
+      },
+      {
+        path: "numberInStock",
+        label: "Stock",
+        sort: true
+      },
+      {
+        path: "dailyRentalRate",
+        label: "Note",
+        sort: true
+      },
+      {
+        path: "like",
+        sort: false,
+        content: item => (
+          <Like
+            like={item.isLiked}
+            onClick={() => this.props.onLike(item._id)}
+          />
+        )
+      },
+      {
+        path: "supprimer",
+        sort: false,
+        content: item => (
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => this.props.onDelete(item._id)}
+          >
+            Supprimer
+          </button>
+        )
+      }
+    ]
+  };
   render() {
     return (
       <React.Fragment>
         {this.props.movies.length !== 0 && (
           <table className="table">
-            <thead>
-              <tr>
-                <th onClick={() => this.props.onSort("title")}>Titre</th>
-                <th onClick={() => this.props.onSort("genre.name")}>Genre</th>
-                <th onClick={() => this.props.onSort("numberInStock")}>
-                  Stock
-                </th>
-                <th onClick={() => this.props.onSort("dailyRentalRate")}>
-                  Note
-                </th>
-                <th />
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.movies.map(movie => {
-                return (
-                  <tr key={movie._id}>
-                    <td>{movie.title}</td>
-                    <td>{movie.genre.name}</td>
-                    <td>{movie.numberInStock}</td>
-                    <td>{movie.dailyRentalRate}</td>
-                    <td>
-                      <Like
-                        like={movie.isLiked}
-                        onClick={() => this.props.onLike(movie._id)}
-                      />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() => this.props.onDelete(movie._id)}
-                      >
-                        Supprimer
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
+            <TableHeader
+              headers={this.state.headers}
+              onSort={this.props.onSort}
+              sort={this.props.sort}
+            />
+            <TableBody
+              items={this.props.movies}
+              headers={this.state.headers}
+              onLike={this.props.onLike}
+              onDelete={this.props.onDelete}
+            />
           </table>
         )}
       </React.Fragment>
