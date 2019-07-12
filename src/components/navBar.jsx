@@ -5,9 +5,9 @@ class Navbar extends Component {
   state = {};
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link to="/" className="navbar-brand mr-5" href="#">
-          Navbar
+          Vidly
         </Link>
         <button
           className="navbar-toggler"
@@ -35,6 +35,11 @@ class Navbar extends Component {
             <li className="nav-item">
               <NavLink className="nav-link" to="/rentals">
                 Location
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/login">
+                S'identifier
               </NavLink>
             </li>
           </ul>

@@ -7,6 +7,7 @@ import NotFound from "./components/notFound";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Navbar from "./components/navBar";
 import MovieForm from "./components/movieForm";
+import LoginForm from "./components/loginForm";
 
 class App extends Component {
   render() {
@@ -19,6 +20,7 @@ class App extends Component {
           <Route path="/movies" component={Movies} />
           <Route path="/customers" component={Customers} />
           <Route path="/rentals" component={Rentals} />
+          <Route path="/login" component={LoginForm} />
           <Route path="/notfound" component={NotFound} />
           <Redirect to="/notfound" />
         </Switch>

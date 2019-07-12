@@ -71,7 +71,7 @@ class Movies extends Component {
     );
 
     return (
-      <div className="container">
+      <div className="container p-5">
         <div className="row">
           <ListGroup
             genreId={genreId}
