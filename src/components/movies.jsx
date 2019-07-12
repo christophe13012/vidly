@@ -42,8 +42,9 @@ class Movies extends Component {
   };
   handleSort = label => {
     const sort = { ...this.state.sort };
+    if (sort.label !== label) sort.order = "asc";
+    else sort.order = sort.order === "asc" ? "desc" : "asc";
     sort.label = label;
-    sort.order = sort.order === "asc" ? "desc" : "asc";
     this.setState({ sort });
   };
   render() {
