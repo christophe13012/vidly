@@ -81,14 +81,13 @@ export function getMovies() {
 }
 
 export function getMovie(id) {
-  console.log(id, movies);
-  console.log(movies.find(m => m._id === id));
-
   return movies.find(m => m._id === id);
 }
 
 export function saveMovie(movie) {
+  console.log(movie._id);
   let movieInDb = movies.find(m => m._id === movie._id) || {};
+
   movieInDb.title = movie.title;
   movieInDb.genre = genresAPI.genres.find(g => g._id === movie.genreId);
   movieInDb.numberInStock = movie.numberInStock;

@@ -7,7 +7,7 @@ class Form extends Component {
   state = {};
   handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state.data);
+    this.doSubmit();
   };
   handleChange = e => {
     const data = { ...this.state.data };

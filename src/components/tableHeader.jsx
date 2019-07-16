@@ -8,6 +8,7 @@ const TableHeader = ({ headers, onSort, sort }) => {
         {headers.map(header => {
           return (
             <th
+              style={{ cursor: "pointer" }}
               key={header.path}
               onClick={header.sort ? () => onSort(header.path) : undefined}
             >

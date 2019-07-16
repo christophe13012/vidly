@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import Pagination from "./pagination";
 import ListGroup from "./listGroup";
-import { getMovies } from "../services/fakeMovieService";
+import { getMovies, deleteMovie } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import { Link } from "react-router-dom";
 import MovieTable from "./movieTable";
 import _ from "lodash";
+import Search from "./search";
 
 class Movies extends Component {
   state = {
-    movies: getMovies(),
+    movies: [],
     itemPerPage: 4,
     activePage: 1,
     genres: [],
@@ -17,7 +18,8 @@ class Movies extends Component {
     sort: {
       path: "title",
       order: "asc"
-    }
+    },
+    search: ""
   };
   componentDidMount() {
     let movies = getMovies();
@@ -26,6 +28,7 @@ class Movies extends Component {
     this.setState({ movies, genres });
   }
   handleDelete = id => {
+    deleteMovie(id);
     const movies = this.state.movies.filter(m => m._id !== id);
     this.setState({ movies });
   };
@@ -39,7 +42,7 @@ class Movies extends Component {
     this.setState({ activePage });
   };
   handleGenre = genreId => {
-    this.setState({ genreId, activePage: 1 });
+    this.setState({ genreId, activePage: 1, search: "" });
   };
   handleSort = path => {
     const sort = { ...this.state.sort };
@@ -48,6 +51,9 @@ class Movies extends Component {
     sort.path = path;
     this.setState({ sort });
   };
+  handleSearch = e => {
+    this.setState({ search: e.target.value, activePage: 1 });
+  };
   render() {
     const {
       movies,
@@ -55,7 +61,8 @@ class Movies extends Component {
       activePage,
       genreId,
       genres,
-      sort
+      sort,
+      search
     } = this.state;
     const genredMovies =
       genreId === 0
@@ -66,7 +73,10 @@ class Movies extends Component {
       [this.state.sort.path],
       [this.state.sort.order]
     );
-    let paginatedMovies = sortedMovies.slice(
+    const searchedMovies = sortedMovies.filter(
+      movie => movie.title.toLowerCase().indexOf(this.state.search) === 0
+    );
+    let paginatedMovies = searchedMovies.slice(
       (activePage - 1) * itemPerPage,
       itemPerPage + (activePage - 1) * itemPerPage
     );
@@ -90,6 +100,7 @@ class Movies extends Component {
                     genredMovies.length
                   } films présents dans la base de donnée`}
             </header>
+            <Search onSearch={this.handleSearch} value={search} />
             <MovieTable
               movies={paginatedMovies}
               onDelete={this.handleDelete}
@@ -101,7 +112,7 @@ class Movies extends Component {
         </div>
 
         <Pagination
-          movies={genredMovies}
+          movies={searchedMovies}
           itemPerPage={itemPerPage}
           activePage={activePage}
           onPagination={this.handlePagination}
@@ -113,7 +124,7 @@ class Movies extends Component {
 
 const styles = {
   header: {
-    marginBottom: 20,
+    marginBottom: 10,
     fontWeight: "500"
   }
 };

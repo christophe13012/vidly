@@ -1,8 +1,8 @@
 import React from "react";
 import Joi from "@hapi/joi";
 import Form from "./form";
-import Select from "./select";
 import { getGenres } from "../services/fakeGenreService";
+import { saveMovie, getMovie } from "../services/fakeMovieService";
 
 class MovieForm extends Form {
   state = {
@@ -21,6 +21,7 @@ class MovieForm extends Form {
     selectItems: getGenres()
   };
   formSchema = {
+    _id: Joi.string(),
     title: Joi.string()
       .min(3)
       .max(50)
@@ -36,17 +37,36 @@ class MovieForm extends Form {
       .required()
   };
   componentDidMount() {
-    const selectItems = getGenres();
-    const data = { ...this.state.data };
-    data.genreId = selectItems[0]._id;
-    this.setState({
-      selectItems,
-      data
-    });
-  }
-  render() {
-    console.log(this.state.data);
+    console.log(this.props);
 
+    const selectItems = getGenres();
+    const movie = getMovie(this.props.match.params.id);
+    if (movie) {
+      const populatedMovie = {
+        _id: movie._id,
+        title: movie.title,
+        genreId: movie.genre._id,
+        numberInStock: movie.numberInStock,
+        dailyRentalRate: movie.dailyRentalRate
+      };
+      this.setState({
+        selectItems,
+        data: populatedMovie
+      });
+    } else if (this.props.match.params.id === "new") {
+      const data = { ...this.state.data };
+      data.genreId = selectItems[0]._id;
+      this.setState({
+        selectItems,
+        data
+      });
+    } else this.props.history.replace("/notFound");
+  }
+  doSubmit = () => {
+    saveMovie(this.state.data);
+    this.props.history.goBack();
+  };
+  render() {
     return (
       <div className="p-5">
         <h1 className="mb-4">Formulaire de film</h1>
