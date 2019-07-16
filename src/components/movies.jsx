@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import MovieTable from "./movieTable";
 import _ from "lodash";
 import Search from "./search";
+import axios from "axios";
 
 class Movies extends Component {
   state = {
@@ -21,9 +22,12 @@ class Movies extends Component {
     },
     search: ""
   };
-  componentDidMount() {
-    let movies = getMovies();
-    let genres = getGenres();
+  async componentDidMount() {
+    const { data: movies } = await axios.get(
+      "http://localhost:5000/api/movies"
+    );
+    let { data: genres } = await axios.get("http://localhost:5000/api/genres");
+    console.log(genres);
     genres = [{ _id: 0, name: "Tous genres" }, ...genres];
     this.setState({ movies, genres });
   }
