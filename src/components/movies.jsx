@@ -3,6 +3,7 @@ import Pagination from "./pagination";
 import ListGroup from "./listGroup";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
+import { Link } from "react-router-dom";
 import MovieTable from "./movieTable";
 import _ from "lodash";
 
@@ -79,6 +80,9 @@ class Movies extends Component {
             onGenre={this.handleGenre}
           />
           <div className="col-9">
+            <Link to="/movies/new" className="btn btn-primary mb-2">
+              Nouveau film
+            </Link>
             <header style={styles.header}>
               {genredMovies.length === 0
                 ? "Aucun film présent dans la base de données"
