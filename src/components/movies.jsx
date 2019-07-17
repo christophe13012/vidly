@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import Pagination from "./pagination";
 import ListGroup from "./listGroup";
-import { getMovies, deleteMovie } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
+import { getMovies, deleteMovie } from "../services/movieService";
+import { getGenres } from "../services/genreService";
 import { Link } from "react-router-dom";
 import MovieTable from "./movieTable";
 import _ from "lodash";
 import Search from "./search";
-import axios from "axios";
+import { toast } from "react-toastify";
 
 class Movies extends Component {
   state = {
@@ -23,18 +23,22 @@ class Movies extends Component {
     search: ""
   };
   async componentDidMount() {
-    const { data: movies } = await axios.get(
-      "http://localhost:5000/api/movies"
-    );
-    let { data: genres } = await axios.get("http://localhost:5000/api/genres");
-    console.log(genres);
+    const { data: movies } = await getMovies();
+    let { data: genres } = await getGenres();
     genres = [{ _id: 0, name: "Tous genres" }, ...genres];
     this.setState({ movies, genres });
   }
-  handleDelete = id => {
-    deleteMovie(id);
-    const movies = this.state.movies.filter(m => m._id !== id);
+  handleDelete = async id => {
+    const originalMovies = this.state.movies;
+    const movies = originalMovies.filter(m => m._id !== id);
     this.setState({ movies });
+    try {
+      await deleteMovie(id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        toast.error("Ce film a déja été supprimé");
+      this.setState({ movies: originalMovies });
+    }
   };
   handleLike = id => {
     const movies = [...this.state.movies];

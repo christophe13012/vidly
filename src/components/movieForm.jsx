@@ -1,8 +1,9 @@
 import React from "react";
 import Joi from "@hapi/joi";
 import Form from "./form";
-import { getGenres } from "../services/fakeGenreService";
-import { saveMovie, getMovie } from "../services/fakeMovieService";
+import { getGenres } from "../services/genreService";
+import { saveMovie, getMovie } from "../services/movieService";
+import { toast } from "react-toastify";
 
 class MovieForm extends Form {
   state = {
@@ -18,7 +19,7 @@ class MovieForm extends Form {
       numberInStock: "",
       dailyRentalRate: ""
     },
-    selectItems: getGenres()
+    selectItems: []
   };
   formSchema = {
     _id: Joi.string(),
@@ -36,12 +37,17 @@ class MovieForm extends Form {
       .max(10)
       .required()
   };
-  componentDidMount() {
-    console.log(this.props);
-
-    const selectItems = getGenres();
-    const movie = getMovie(this.props.match.params.id);
-    if (movie) {
+  async componentDidMount() {
+    const { data: selectItems } = await getGenres();
+    const data = { ...this.state.data };
+    data.genreId = selectItems[0]._id;
+    this.setState({
+      selectItems,
+      data
+    });
+    if (this.props.match.params.id === "new") return;
+    try {
+      const { data: movie } = await getMovie(this.props.match.params.id);
       const populatedMovie = {
         _id: movie._id,
         title: movie.title,
@@ -53,18 +59,21 @@ class MovieForm extends Form {
         selectItems,
         data: populatedMovie
       });
-    } else if (this.props.match.params.id === "new") {
-      const data = { ...this.state.data };
-      data.genreId = selectItems[0]._id;
-      this.setState({
-        selectItems,
-        data
-      });
-    } else this.props.history.replace("/notFound");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/notfound");
+    }
   }
-  doSubmit = () => {
-    saveMovie(this.state.data);
-    this.props.history.goBack();
+  doSubmit = async () => {
+    const movie = { ...this.state.data };
+    movie.title = movie.title.charAt(0).toUpperCase() + movie.title.slice(1);
+    try {
+      await saveMovie(movie);
+      this.props.history.push("/movies");
+    } catch (ex) {
+      if (ex.reponse && ex.response.status === 404)
+        toast.error("Un erreur est arrivée");
+    }
   };
   render() {
     return (

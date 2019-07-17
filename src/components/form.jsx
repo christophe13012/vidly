@@ -23,6 +23,8 @@ class Form extends Component {
   handleSelect = e => {
     const data = { ...this.state.data };
     data[e.target.id] = e.target.value;
+    console.log(data);
+
     this.setState({ data });
   };
   renderInput = (label, type, id) => {
