@@ -71,7 +71,7 @@ class MovieForm extends Form {
       await saveMovie(movie);
       this.props.history.push("/movies");
     } catch (ex) {
-      if (ex.reponse && ex.response.status === 404)
+      if (ex.response && ex.response.status === 404)
         toast.error("Un erreur est arrivée");
     }
   };

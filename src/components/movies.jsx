@@ -106,7 +106,7 @@ class Movies extends Component {
                 ? "Aucun film présent dans la base de données"
                 : `Voici ${
                     genredMovies.length
-                  } films présents dans la base de donnée`}
+                  } films présents dans la base de données`}
             </header>
             <Search onSearch={this.handleSearch} value={search} />
             <MovieTable

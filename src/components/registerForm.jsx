@@ -1,12 +1,21 @@
 import React from "react";
-import Joi from "@hapi/joi";
 import Form from "./form";
-import { auth } from "../services/authService";
+import Joi from "@hapi/joi";
+import { register } from "../services/userService";
+import { toast } from "react-toastify";
 
-class LoginForm extends Form {
+class RegisterForm extends Form {
   state = {
-    data: { email: "", password: "" },
-    errors: { email: "", password: "" }
+    data: {
+      email: "",
+      password: "",
+      name: ""
+    },
+    errors: {
+      email: "",
+      password: "",
+      name: ""
+    }
   };
   formSchema = {
     email: Joi.string()
@@ -16,13 +25,17 @@ class LoginForm extends Form {
       .required(),
     password: Joi.string()
       .regex(/^[a-zA-Z0-9]{3,30}$/)
+      .required(),
+    name: Joi.string()
+      .min(3)
+      .max(30)
       .required()
   };
   doSubmit = async () => {
     try {
-      const { data: jwt } = await auth(this.state.data);
+      const { data: jwt } = await register(this.state.data);
       localStorage.setItem("token", jwt);
-      window.location = "/";
+      this.props.history.push("/");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
@@ -34,15 +47,16 @@ class LoginForm extends Form {
   render() {
     return (
       <div className="p-5">
-        <h1 className="mb-4">S'identifier</h1>
-        <form className="col-lg-8">
+        <h1 className="mb-4">S'enregistrer</h1>
+        <form>
           {this.renderInput("Adresse email", "email", "email")}
-          {this.renderInput("Mot de passe", "password", "password")}
-          {this.renderButton("S'identifier")}
+          {this.renderInput("Password", "password", "password")}
+          {this.renderInput("Name", "text", "name")}
+          {this.renderButton("S'enregistrer")}
         </form>
       </div>
     );
   }
 }
 
-export default LoginForm;
+export default RegisterForm;

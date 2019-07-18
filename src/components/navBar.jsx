@@ -37,11 +37,33 @@ class Navbar extends Component {
                 Location
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/login">
-                S'identifier
-              </NavLink>
-            </li>
+            {this.props.user ? (
+              <React.Fragment>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/login">
+                    {this.props.user.name}
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/logout">
+                    Se déconnecter
+                  </NavLink>
+                </li>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/login">
+                    S'identifier
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/register">
+                    S'enregistrer
+                  </NavLink>
+                </li>
+              </React.Fragment>
+            )}
           </ul>
         </div>
       </nav>
