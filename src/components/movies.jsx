@@ -3,6 +3,7 @@ import Pagination from "./pagination";
 import ListGroup from "./listGroup";
 import { getMovies, deleteMovie } from "../services/movieService";
 import { getGenres } from "../services/genreService";
+import { rent } from "../services/rentService";
 import { Link } from "react-router-dom";
 import MovieTable from "./movieTable";
 import _ from "lodash";
@@ -38,6 +39,18 @@ class Movies extends Component {
       if (ex.response && ex.response.status === 404)
         toast.error("Ce film a déja été supprimé");
       this.setState({ movies: originalMovies });
+    }
+  };
+  handleRent = async id => {
+    const location = {};
+    location.userId = this.props.user._id;
+    location.movieId = id;
+    try {
+      await rent(location);
+      toast.success("Location prise en compte");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return toast.error("Erreur sur l'utilisateur ou le film");
     }
   };
   handleLike = id => {
@@ -112,9 +125,11 @@ class Movies extends Component {
             <MovieTable
               movies={paginatedMovies}
               onDelete={this.handleDelete}
+              onRent={this.handleRent}
               onLike={this.handleLike}
               onSort={this.handleSort}
               sort={sort}
+              user={this.props.user}
             />
           </div>
         </div>

@@ -31,25 +31,41 @@ class MovieTable extends Component {
       {
         path: "like",
         sort: false,
-        content: item => (
-          <Like
-            like={item.isLiked}
-            onClick={() => this.props.onLike(item._id)}
-          />
-        )
+        content: item =>
+          this.props.user ? (
+            <Like
+              like={item.isLiked}
+              onClick={() => this.props.onLike(item._id)}
+            />
+          ) : null
+      },
+      {
+        path: "louer",
+        sort: false,
+        content: item =>
+          this.props.user ? (
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={() => this.props.onRent(item._id)}
+            >
+              Louer
+            </button>
+          ) : null
       },
       {
         path: "supprimer",
         sort: false,
-        content: item => (
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() => this.props.onDelete(item._id)}
-          >
-            Supprimer
-          </button>
-        )
+        content: item =>
+          this.props.user ? (
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => this.props.onDelete(item._id)}
+            >
+              Supprimer
+            </button>
+          ) : null
       }
     ]
   };

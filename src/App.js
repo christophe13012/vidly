@@ -30,8 +30,19 @@ class App extends Component {
         <Navbar user={this.state.user} />
         <Switch>
           <Redirect exact from="/" to="/movies" />
-          <Route path="/movies/:id" component={MovieForm} />
-          <Route path="/movies" component={Movies} />
+          <Route
+            path="/movies/:id"
+            render={props => {
+              if (!this.state.user) return <Redirect to="/login" />;
+              return <MovieForm {...props} />;
+            }}
+          />
+          <Route
+            path="/movies"
+            render={props => {
+              return <Movies {...props} user={this.state.user} />;
+            }}
+          />
           <Route path="/customers" component={Customers} />
           <Route path="/rentals" component={Rentals} />
           <Route path="/login" component={LoginForm} />
