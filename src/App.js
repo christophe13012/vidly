@@ -45,7 +45,12 @@ class App extends Component {
           />
           <Route path="/customers" component={Customers} />
           <Route path="/rentals" component={Rentals} />
-          <Route path="/login" component={LoginForm} />
+          <Route
+            path="/login"
+            render={props => {
+              return <LoginForm {...props} user={this.state.user} />;
+            }}
+          />
           <Route path="/register" component={RegisterForm} />
           <Route path="/logout" component={Logout} />
           <Route path="/notfound" component={NotFound} />

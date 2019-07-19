@@ -34,7 +34,7 @@ class RegisterForm extends Form {
     try {
       const { data: jwt } = await register(this.state.data);
       localStorage.setItem("token", jwt);
-      this.props.history.push("/");
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

@@ -65,7 +65,7 @@ class Rentals extends Component {
 
     return (
       <div className="p-5">
-        <h1 className="mb-4">Films en location</h1>
+        <h3 className="mb-4">Films en location</h3>
         <React.Fragment>
           {this.state.movies.length !== 0 && (
             <table className="table">

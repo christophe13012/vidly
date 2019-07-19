@@ -27,11 +27,6 @@ class Navbar extends Component {
                 Films
               </NavLink>
             </li>
-            <li className="nav-item mr-2">
-              <NavLink className="nav-link" to="/customers">
-                Clients
-              </NavLink>
-            </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/rentals">
                 Locations

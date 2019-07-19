@@ -34,12 +34,22 @@ class LoginForm extends Form {
   render() {
     return (
       <div className="p-5">
-        <h1 className="mb-4">S'identifier</h1>
-        <form className="col-lg-8">
-          {this.renderInput("Adresse email", "email", "email")}
-          {this.renderInput("Mot de passe", "password", "password")}
-          {this.renderButton("S'identifier")}
-        </form>
+        {this.props.user ? (
+          <React.Fragment>
+            <h3 className="mb-4">Compte client</h3>
+            <p> Nom d'utilisateur : {this.props.user.name}</p>
+            <p> Adresse email : {this.props.user.email}</p>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <h3 className="mb-4">S'identifier</h3>
+            <form className="col-lg-8">
+              {this.renderInput("Adresse email", "email", "email")}
+              {this.renderInput("Mot de passe", "password", "password")}
+              {this.renderButton("S'identifier")}
+            </form>
+          </React.Fragment>
+        )}
       </div>
     );
   }
