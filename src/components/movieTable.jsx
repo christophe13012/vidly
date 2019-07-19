@@ -48,6 +48,7 @@ class MovieTable extends Component {
               type="button"
               className="btn btn-success"
               onClick={() => this.props.onRent(item._id)}
+              disabled={item.numberInStock < 1 ? true : false}
             >
               Louer
             </button>

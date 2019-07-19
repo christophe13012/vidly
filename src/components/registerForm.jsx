@@ -2,7 +2,6 @@ import React from "react";
 import Form from "./form";
 import Joi from "@hapi/joi";
 import { register } from "../services/userService";
-import { toast } from "react-toastify";
 
 class RegisterForm extends Form {
   state = {

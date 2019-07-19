@@ -34,7 +34,7 @@ class Navbar extends Component {
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/rentals">
-                Location
+                Locations
               </NavLink>
             </li>
             {this.props.user ? (

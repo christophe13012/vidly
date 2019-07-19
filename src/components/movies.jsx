@@ -46,7 +46,11 @@ class Movies extends Component {
     location.userId = this.props.user._id;
     location.movieId = id;
     try {
-      await rent(location);
+      const { data: movieInDb } = await rent(location);
+      const movies = [...this.state.movies];
+      const index = movies.findIndex(movie => movie._id === movieInDb._id);
+      movies[index] = movieInDb;
+      this.setState({ movies });
       toast.success("Location prise en compte");
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
