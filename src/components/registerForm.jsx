@@ -8,13 +8,15 @@ class RegisterForm extends Form {
     data: {
       email: "",
       password: "",
-      name: ""
+      name: "",
+      isAdmin: false
     },
     errors: {
       email: "",
       password: "",
       name: ""
-    }
+    },
+    selectItems: [{ _id: true, name: "Oui" }, { _id: false, name: "Non" }]
   };
   formSchema = {
     email: Joi.string()
@@ -28,7 +30,8 @@ class RegisterForm extends Form {
     name: Joi.string()
       .min(3)
       .max(30)
-      .required()
+      .required(),
+    isAdmin: Joi.boolean().required()
   };
   doSubmit = async () => {
     try {
@@ -51,6 +54,11 @@ class RegisterForm extends Form {
           {this.renderInput("Adresse email", "email", "email")}
           {this.renderInput("Password", "password", "password")}
           {this.renderInput("Name", "text", "name")}
+          {this.renderSelect(
+            "Administrateur",
+            "isAdmin",
+            this.state.selectItems
+          )}
           {this.renderButton("S'enregistrer")}
         </form>
       </div>

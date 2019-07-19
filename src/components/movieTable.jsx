@@ -63,14 +63,17 @@ class MovieTable extends Component {
               type="button"
               className="btn btn-danger"
               onClick={() => this.props.onDelete(item._id)}
+              disabled={this.props.user.isAdmin ? false : true}
             >
-              Supprimer
+              Supprimer (Admin)
             </button>
           ) : null
       }
     ]
   };
   render() {
+    console.log(this.props.user);
+
     return (
       <React.Fragment>
         {this.props.movies.length !== 0 && (
